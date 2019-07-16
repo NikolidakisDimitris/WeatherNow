@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Weather Now</string>
+    <string name="default_location">Get the Location</string>
+    <string name="default_temp">NA</string>
+    <string name="change_city">Click to Change the City</string>
+    <string name="weather_description">This is the weather symbol</string>
+    <string name="back_button_description">Dismiss Change City Screen</string>
+    <string name="get_weather">Change City</string>
+    <string name="default_query">Enter city name</string>
+    <string name="temperature"></string>
+</resources>
