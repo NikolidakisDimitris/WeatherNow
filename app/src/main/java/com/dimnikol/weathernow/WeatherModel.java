@@ -38,29 +38,27 @@ public class WeatherModel extends Thread {
     private String updateBackground(int conditionCode) {
 
         if (conditionCode >= 0 && conditionCode < 300) {
-            return "storm";
-        } else if (conditionCode >= 300 && conditionCode < 500) {
-            return "rain";
-        } else if (conditionCode >= 500 && conditionCode < 600) {
-            return "rain";
+            return "Storm";
+        } else if (conditionCode >= 300 && conditionCode < 600) {
+            return "Rain";
         } else if (conditionCode >= 600 && conditionCode <= 700) {
-            return "snow";
+            return "Snow";
         } else if (conditionCode >= 701 && conditionCode <= 771) {
-            return "fog";
+            return "Fog";
         } else if (conditionCode >= 772 && conditionCode < 800) {
-            return "storm";
+            return "Storm";
         } else if (conditionCode == 800) {
-            return "sunny";
+            return "Sunny";
         } else if (conditionCode >= 801 && conditionCode <= 804) {
-            return "cloudy";
+            return "Cloudy";
         } else if (conditionCode >= 900 && conditionCode <= 902) {
-            return "storm";
+            return "Storm";
         } else if (conditionCode == 903) {
-            return "snow";
+            return "Snow";
         } else if (conditionCode == 904) {
-            return "sunny";
+            return "Sunny";
         } else if (conditionCode >= 905 && conditionCode <= 1000) {
-            return "storm";
+            return "Storm";
         }
 
         return "dunno";

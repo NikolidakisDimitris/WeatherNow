@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-import com.dimnikol.weathernow.activities.MainActivity;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
@@ -26,9 +24,9 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 import lombok.Data;
 
+import static com.dimnikol.weathernow.Utils.getPrefix;
 import static com.dimnikol.weathernow.activities.MainActivity.APP_ID;
 import static com.dimnikol.weathernow.activities.MainActivity.GET_LOCATION_CODE;
-import static com.dimnikol.weathernow.Utils.getPrefix;
 
 @Data
 public class WeatherAPIHelper {
@@ -49,8 +47,7 @@ public class WeatherAPIHelper {
 
 
     public void sentGetRequest(RequestParams params, String url) {
-        System.out.println("Sent get Request");
-        // AsyncHttpClient belongs to the loopj dependency.
+        // SyncHttpClient belongs to the loopj dependency.
         SyncHttpClient client = new SyncHttpClient();
 
         // Making an HTTP GET request by providing a URL and the parameters.
@@ -60,12 +57,9 @@ public class WeatherAPIHelper {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 Log.d(getPrefix(this), "Success! JSON: " + response.toString());
-                System.out.println("prin to parsarisma");
                 WeatherModel weather = new WeatherModel();
                 weather.fromJson(response);
-                System.out.println("Stin APIHelper to response einai "+weather);
                 currentWeather = weather;
-//                                updateUI(weatherData);
             }
 
             @Override
@@ -78,14 +72,12 @@ public class WeatherAPIHelper {
                         Toast.makeText(context, "Request Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
-//                Toast.makeText(context, "Request Failed", Toast.LENGTH_SHORT).show();
 
                 Log.d(getPrefix(this), "Status code " + statusCode);
                 Log.d(getPrefix(this), "Here's what we got instead " + response.toString());
             }
 
         });
-        System.out.println("Done in get request" );
     }
 
 
@@ -98,7 +90,6 @@ public class WeatherAPIHelper {
 
         sentGetRequest(params, WEATHER_URL);
 
-//        return currentWeather;
     }
 
 
@@ -107,10 +98,6 @@ public class WeatherAPIHelper {
 
         Log.d(getPrefix(this), "Getting weather for current location");
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-
-
-
-
 
         locationListener = new LocationListener() {
             @Override
@@ -158,8 +145,7 @@ public class WeatherAPIHelper {
             return;
         }
 
-
-//         Speed up update on screen by using last known location.
+        //Speed up update on screen by using last known location.
         Location lastLocation = locationManager.getLastKnownLocation(LOCATION_PROVIDER);
         String longitude = String.valueOf(lastLocation.getLongitude());
         String latitude = String.valueOf(lastLocation.getLatitude());
@@ -178,7 +164,6 @@ public class WeatherAPIHelper {
                 + locationManager.getLastKnownLocation(LOCATION_PROVIDER));
         Log.d(getPrefix(this), "Requesting location updates");
 
-//        locationManager.requestLocationUpdates(LOCATION_PROVIDER, MIN_TIME, MIN_DISTANCE, locationListener);
 
 
 

@@ -26,14 +26,12 @@ public class MainActivity extends AppCompatActivity {
     public static final int GET_LOCATION_CODE = 1;
     public static final int NEW_CITY_CODE = 2;
 
-    //TODO:  App ID to use OpenWeather data (Need to delete it)
     public static final String APP_ID = "cae1774df2eaf18c394ae23ee02fbc59";
 
-    WeatherModel weatherModel;
+    private WeatherModel weatherModel;
 
 
 
-    // TODO: Declare a LocationManager and a LocationListener here:
     private LocationManager locationManager;
     private LocationListener locationListener;
     private RelativeLayout relativeLayout;
@@ -56,16 +54,12 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.outerBox);
         weatherTemperature = findViewById(R.id.weatherDegrees);
 
-//        apiHelper.getWeatherForCurrentLocation(locationManager, locationListener, this);
-
-
         ImageButton changeCityButton = findViewById(R.id.changeCityButton);
 
         changeCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this, ChangeCity.class);
-                System.out.println("Clicked the button to change country");
                 // Using startActivityForResult since we just get back the city name.
                 // Providing an arbitrary request code to check against later.
                 startActivityForResult(myIntent, NEW_CITY_CODE);
@@ -83,10 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
             Thread thread = new Thread(){
                 public void run(){
-                    System.out.println("Inside the thread");
                     apiHelper.getWeatherForCurrentLocation(locationManager, locationListener, MainActivity.this);
                     weatherModel = apiHelper.getCurrentWeather();
-                    System.out.println("The weather is ");
                 }
             };
             thread.start();
@@ -95,9 +87,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-
-            System.out.println(weatherModel);
             updateUI(weatherModel);
             userLocation=false;
         }
@@ -120,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(getPrefix(this), "onActivityResult() called");
 
-        System.out.println(requestCode);
         if (requestCode == NEW_CITY_CODE) {
-            System.out.println(resultCode);
             if (resultCode == RESULT_OK) {
                 final String city = data.getStringExtra("City");
                 Log.d(getPrefix(this), "New city is " + city);
@@ -131,10 +118,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Thread thread = new Thread(){
                     public void run(){
-                        System.out.println("Inside the thread");
                         apiHelper.getWeatherForNewCity(city);
                         weatherModel = apiHelper.getCurrentWeather();
-                        System.out.println("The weather is ");
                     }
                 };
                 thread.start();
@@ -145,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Log.d(getPrefix(this), "The weather is " + weatherModel.getTemperature());
-                System.out.println("OnActivity result . the weather is =" + weatherModel);
                 updateUI(weatherModel);
             }
         }
@@ -172,23 +156,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Updates the information shown on screen.
     private void updateUI(WeatherModel weather) {
-        System.out.println("Update UI -> " + weather);
-        weatherTemperature.setText(weather.getCondition() + "\n" + weather.getTemperature() + " \u2103");
+        weatherTemperature.setText(weather.getCity()+"\n"+weather.getCondition() + "\n" + weather.getTemperature() + " \u2103");
 
-        int resourceID = getResources().getIdentifier(weather.getCondition(), "drawable", getPackageName());
+        int resourceID = getResources().getIdentifier(weather.getCondition().toLowerCase(), "drawable", getPackageName());
         Drawable resources = getResources().getDrawable(resourceID);
-        System.out.println(weather.getConditionCode());
-        System.out.println(weather.getCondition());
-        System.out.println(resources);
         relativeLayout.setBackground(resources);
-
-//        weatherTemperature.setTextColor();
-//        temperatureLabel.setText(weather.getTemperature());
-//        cityLabel.setText(weather.getCity());
-
-        // Update the icon based on the resource id of the image in the drawable folder.
-//        int resourceID = getResources().getIdentifier(weather.getCondition(), "drawable", getPackageName());
-//        weatherImage.setImageResource(resourceID);
 
     }
 
